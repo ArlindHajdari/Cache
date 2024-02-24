@@ -48,7 +48,7 @@ namespace CacheTest.Controllers
         /// </summary>
         /// <param name="number">The quote number.</param>
         /// <returns>The quote string.</returns>
-        [OutputCache(Duration = 3600, NoStore = false, VaryByQueryKeys = ["number"], Tags = ["quote"])]
+        [OutputCache(Duration = 3600, NoStore = false, PolicyName = "ByNumber")]
         public string Quote([FromQuery]int number)
         {
             return $"This is the quote number: {number}";
@@ -56,7 +56,7 @@ namespace CacheTest.Controllers
 
         public async Task<string> RemoveQuote([FromQuery]int number, CancellationToken ct)
         {
-            await _outputCacheStore.EvictByTagAsync("quote", ct);
+            await _outputCacheStore.EvictByTagAsync(number.ToString(), ct);
             return $"This is the quote number: {number}";
         }
     }

@@ -1,10 +1,15 @@
 using Microsoft.AspNetCore.OutputCaching;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using OutputCache;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-builder.Services.AddOutputCache();
+builder.Services.AddOutputCache(options => 
+{
+    options.AddPolicy("ByNumber", ByNumberPolicy.Instance);
+});
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
